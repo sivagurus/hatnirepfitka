@@ -1,0 +1,12 @@
+help - To get this message
+mirror - [download_url][magnet_link]: Start mirroring the link to google drive
+unzipmirror - [download_url][magnet_link] : starts mirroring and if downloaded file is any archive , extracts it to google drive
+tarmirror - [download_url][magnet_link]: start mirroring and upload the archived (.tar) version of the download
+watch - [youtube-dl supported link]: Mirror through youtube-dl 
+tarwatch - [youtube-dl supported link]: Mirror through youtube-dl and tar before uploading
+clone - clone gdrive files
+cancel - Reply to the message by which the download was initiated and that download will be cancelled
+status - Shows a status of all the downloads
+list - [search term] Searches the search term in the Google drive, if found replies with the link
+stats - Show Stats of the machine the bot is hosted on
+log - Get a log file of the bot. Handy for getting crash reports

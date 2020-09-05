@@ -1,0 +1,84 @@
+{
+  "name": "Telegram Torrent Leecher",
+  "description": "A Telegram Torrent (and youtube-dl) Leecher based on Pyrogram",
+  "keywords": [
+    "telegram"
+  ],
+  "repository": "https://github.com/sivagurus/hatnirepfitka",
+  "website": "https://github.com/sivagurus/hatnirepfitka",
+  "env": {
+    "TELEGRAM_API": {
+      "description": "Get this value from https://my.telegram.org",
+      "value": ""
+    },
+    "TELEGRAM_HASH": {
+      "description": "Get this value from https://my.telegram.org",
+      "value": ""
+    },
+    "BOT_TOKEN": {
+      "description": "get this value from @BotFather",
+      "value": ""
+    },
+    "AUTHORIZED_CHATS": {
+      "description": "should be an integer. The BOT API ID of the Telegram Group, where the Leecher should work.",
+      "required": false
+    },
+    "OWNER_ID": {
+      "description": "should be an integer. ID of owner of bot",
+      "value": ""
+    },
+    "INDEX_URL": {
+      "description": "Enter your custom leech command like /leech@urgroupname and so on. Default is /leech",
+      "value": ""
+    },
+    "CRED_JSON": {
+      "description": "Enter your custom leech command like /leech@urgroupname and so on. Default is /leech",
+      "value": ""
+    },
+    "GDRIVE_FOLDER_ID": {
+      "description": "Enter your custom leech command like /leech@urgroupname and so on. Default is /leech",
+      "value": ""
+    },
+    "DOWNLOAD_DIR": {
+      "description": "Enter your custom leech command like /leech@urgroupname and so on. Default is /leech",
+      "value": "./downloads",
+      "required": false
+    },
+    "DOWNLOAD_STATUS_UPDATE_INTERVAL": {
+      "description": "Enter your index link:",
+      "value": "5",
+      "required": false
+    },
+    "AUTO_DELETE_MESSAGE_DURATION": {
+      "description": "Enter your custom gleech command like /gleech1@urgroupname and so on. Default is /gleech",
+      "value": "20",
+      "required": false
+    },
+    "IS_TEAM_DRIVE": {
+      "description": "Enter your custom leech command like /leech@urgroupname and so on. Default is /leech",
+      "value": "",
+      "required": false
+    },
+    "USE_SERVICE_ACCOUNTS": {
+      "description": "Enter your custom leech command like /leech@urgroupname and so on. Default is /leech",
+      "value": "",
+      "required": false
+    },
+    "MEGA_API_KEY": {
+      "description": "Enter your custom leech command like /leech@urgroupname and so on. Default is /leech",
+      "value": "",
+      "required": false
+    },
+    "MEGA_EMAIL_ID": {
+      "description": "Enter your custom leech command like /leech@urgroupname and so on. Default is /leech",
+      "value": "",
+      "required": false
+    },
+    "MEGA_PASSWORD": {
+      "description": "Enter your custom leech command like /leech@urgroupname and so on. Default is /leech",
+      "value": "",
+      "required": false
+    }
+  },
+  "stack": "container"
+}

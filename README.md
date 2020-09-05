@@ -7,3 +7,7 @@ This is a telegram bot writen in python for mirroring files on the internet to o
 
 # Inspiration 
 This project is heavily inspired from @out386 's telegram bot which is written in JS.
+
+### The Easy Way
+
+[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy)
