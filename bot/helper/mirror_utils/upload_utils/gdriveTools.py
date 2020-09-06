@@ -27,6 +27,11 @@ LOGGER = logging.getLogger(__name__)
 logging.getLogger('googleapiclient.discovery').setLevel(logging.ERROR)
 SERVICE_ACCOUNT_INDEX = 0
 
+from pyrogram.types import (
+    InlineKeyboardButton,
+    InlineKeyboardMarkup
+)
+
 
 class GoogleDriveHelper:
     def __init__(self, name=None, listener=None):
@@ -291,37 +296,43 @@ class GoogleDriveHelper:
             file_id = self.getIdFromUrl(link)
         except (KeyError,IndexError):
             msg = "Google drive ID could not be found in the provided link"
-            return msg
+            return msg, ""
         msg = ""
         LOGGER.info(f"File ID: {file_id}")
+        inline_keyboard = []
+        ikeyboard = []
         try:
             meta = self.getFileMetadata(file_id)
             if meta.get("mimeType") == self.__G_DRIVE_DIR_MIME_TYPE:
                 dir_id = self.create_directory(meta.get('name'), parent_id)
                 result = self.cloneFolder(meta.get('name'), meta.get('name'), meta.get('id'), dir_id)
-                msg += f'<a href="{self.__G_DRIVE_DIR_BASE_DOWNLOAD_URL.format(dir_id)}">{meta.get("name")}</a>' \
-                        f' ({get_readable_file_size(self.transferred_size)})'
+                msg += f'<b>Filename : </b><code>{meta.get("name")}</code>\n<b>Size : </b>{get_readable_file_size(self.transferred_size)}'
+                ikeyboard.append(InlineKeyboardButton(text="⚡Drive Link⚡", url=self.__G_DRIVE_DIR_BASE_DOWNLOAD_URL.format(dir_id)))
                 if INDEX_URL is not None:
-                    url = requests.utils.requote_uri(f'{INDEX_URL}/{meta.get("name")}/')
-                    msg += f' | <a href="{url}"> Index URL</a>'
+                    url_path = requests.utils.quote(f'{meta.get("name")}')
+                    url = f'{INDEX_URL}/{url_path}/'
+                    ikeyboard.append(InlineKeyboardButton(text="💥Index Link💥", url=url))                    
             else:
                 file = self.copyFile(meta.get('id'), parent_id)
-                msg += f'<a href="{self.__G_DRIVE_BASE_DOWNLOAD_URL.format(file.get("id"))}">{file.get("name")}</a>'
+                msg += f'<b>Filename : </b><code>{file.get("name")}</code>'
+                ikeyboard.append(InlineKeyboardButton(text="⚡Drive Link⚡", url=self.__G_DRIVE_BASE_DOWNLOAD_URL.format(file.get("id"))))
                 try:
-                    msg += f' ({get_readable_file_size(int(meta.get("size")))}) '
+                    msg += f'\n<b>Size : </b><code>{get_readable_file_size(int(meta.get("size")))}</code>'
                 except TypeError:
                     pass
                 if INDEX_URL is not None:
-                        url = requests.utils.requote_uri(f'{INDEX_URL}/{file.get("name")}')
-                        msg += f' | <a href="{url}"> Index URL</a>'
+                        url_path = requests.utils.quote(f'{file.get("name")}')
+                        url = f'{INDEX_URL}/{url_path}'
+                        ikeyboard.append(InlineKeyboardButton(text="💥Index Link💥", url=url))     
         except Exception as err:
             if isinstance(err, RetryError):
                 LOGGER.info(f"Total Attempts: {err.last_attempt.attempt_number}")
                 err = err.last_attempt.exception()
             err = str(err).replace('>', '').replace('<', '')
             LOGGER.error(err)
-            return err
-        return msg
+            return err, ""
+        inline_keyboard.append(ikeyboard)
+        return msg, InlineKeyboardMarkup(inline_keyboard)
 
     def cloneFolder(self, name, local_path, folder_id, parent_id):
         LOGGER.info(f"Syncing: {local_path}")

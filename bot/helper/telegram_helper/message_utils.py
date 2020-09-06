@@ -1,5 +1,9 @@
 from pyrogram import Client
-from pyrogram.types import Message
+from pyrogram.types import (
+    Message,
+    InlineKeyboardButton,
+    InlineKeyboardMarkup
+)
 import time
 from bot import AUTO_DELETE_MESSAGE_DURATION, LOGGER, \
     status_reply_dict, status_reply_dict_lock
@@ -11,6 +15,16 @@ def sendMessage(text: str, bot: Client, message: Message):
         return bot.send_message(chat_id=message.chat.id,
                             reply_to_message_id=message.message_id,
                             text=text)
+    except Exception as e:
+        LOGGER.error(str(e))
+        
+def sendMarkup(text: str, bot: Client, message: Message, reply_markup: InlineKeyboardMarkup):
+    try:
+        return bot.send_message(chat_id=message.chat.id,
+                             reply_to_message_id=message.message_id,
+                             text=text, 
+                             reply_markup=reply_markup, 
+                             parse_mode='html')
     except Exception as e:
         LOGGER.error(str(e))
 

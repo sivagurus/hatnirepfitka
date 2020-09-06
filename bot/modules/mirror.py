@@ -3,7 +3,11 @@ from pyrogram import (
     Client,
     filters
 )
-from pyrogram.types import Message
+from pyrogram.types import (
+    Message,
+    InlineKeyboardButton,
+    InlineKeyboardMarkup
+)
 from bot import Interval, INDEX_URL
 from bot import AUTHORIZED_CHATS, DOWNLOAD_DIR, DOWNLOAD_STATUS_UPDATE_INTERVAL, download_dict, download_dict_lock
 from bot.helper.ext_utils import fs_utils, bot_utils
@@ -153,24 +157,32 @@ class MirrorListener(listeners.MirrorListeners):
 
     def onUploadComplete(self, file_id: str):
         with download_dict_lock:
+            msg = f'<b>Filename : </b><code>{download_dict[self.uid].name()}</code>\n<b>Size : </b><code>{download_dict[self.uid].size()}</code>'
             link = f"https://drive.google.com/open?id={file_id}"
-            msg = f'<a href="{link}">{download_dict[self.uid].name()}</a> ({download_dict[self.uid].size()})'
+            inline_keyboard = []
+            ikeyboard = []
+            ikeyboard.append(InlineKeyboardButton(text="⚡Drive Link⚡", url=link))
             LOGGER.info(f'Done Uploading {download_dict[self.uid].name()}')
             if INDEX_URL is not None:
-                share_url = requests.utils.requote_uri(f'{INDEX_URL}/{file_id}/{download_dict[self.uid].name()}')
+                url_path = requests.utils.quote(f'{download_dict[self.uid].name()}')
+                share_url = f'{INDEX_URL}/{url_path}'
                 if os.path.isdir(f'{DOWNLOAD_DIR}/{self.uid}/{download_dict[self.uid].name()}'):
-                    share_url = None
-                if share_url:
-                    msg += f'\n\n Shareable link: <a href="{share_url}">here</a>'
-            if self.tag is not None:
-                msg += f'\ncc: @{self.tag}'
+                    share_url += '/'
+                ikeyboard.append(InlineKeyboardButton(text="💥Index Link💥", url=share_url))
+            if self.message.from_user.username:
+                uname = f"@{self.message.from_user.username}"
+            else:
+                uname = f'<a href="tg://user?id={self.message.from_user.id}">{self.message.from_user.first_name}</a>'
+            if uname is not None:
+                msg += f'\n\nHey {uname}, your file is uploaded'
             try:
                 fs_utils.clean_download(download_dict[self.uid].path())
             except FileNotFoundError:
                 pass
             del download_dict[self.uid]
             count = len(download_dict)
-        sendMessage(msg, self.bot, self.update)
+            inline_keyboard.append(ikeyboard)
+        sendMarkup(msg, self.bot, self.update, InlineKeyboardMarkup(inline_keyboard))
         if count == 0:
             self.clean()
         else:

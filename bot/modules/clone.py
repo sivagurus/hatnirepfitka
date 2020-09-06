@@ -22,8 +22,12 @@ def cloneNode(client: Client, message: Message):
         link = args[1]
         msg = sendMessage(f"Cloning: <code>{link}</code>", client, message)
         gd = GoogleDriveHelper()
-        result = gd.clone(link)
+        result, button = gd.clone(link)
         deleteMessage(msg)
-        sendMessage(result, client, message)
+        if button == "":
+            sendMessage(result, client, message)
+        else:
+            sendMarkup(result, client, message, button)
+        
     else:
         sendMessage("Provide G-Drive Shareable Link to Clone.", client, message)

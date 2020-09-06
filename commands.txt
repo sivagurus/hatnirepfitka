@@ -7,6 +7,11 @@ tarwatch - [youtube-dl supported link]: Mirror through youtube-dl and tar before
 clone - clone gdrive files
 cancel - Reply to the message by which the download was initiated and that download will be cancelled
 status - Shows a status of all the downloads
-list - [search term] Searches the search term in the Google drive, if found replies with the link
-stats - Show Stats of the machine the bot is hosted on
-log - Get a log file of the bot. Handy for getting crash reports
+list - [search term] Searches the search term in the Google drive, if found replies with the link.
+ping - [Admin command] Check bot alive
+stats - [Admin command] Show Stats of the machine the bot is hosted on
+log - [Admin command] Get a log file of the bot. Handy for getting crash reports
+restart - [Admin command] restart the bot
+cancelall - [Admin command] cancel all
+eval - [Admin command]
+exec - [Admin command]
