@@ -81,10 +81,10 @@ def get_progress_bar_string(status):
     p = min(max(p, 0), 100)
     cFull = p // 8
     cPart = p % 8 - 1
-    p_str = '🟧' * cFull
+    p_str = '🟩' * cFull
     if cPart >= 0:
         p_str += PROGRESS_INCOMPLETE[cPart]
-    p_str += ' ' * (PROGRESS_MAX_SIZE - cFull)
+    p_str += '  ' * (PROGRESS_MAX_SIZE - cFull)
     p_str = f"[{p_str}]"
     return p_str
 
@@ -101,9 +101,12 @@ def get_readable_message():
                        f"\n💾 <b>Size :</b> {download.size()}" \
                        f"\n🚀 <b>Speed :</b> {download.speed()} <b>| ETA :</b> {download.eta()} "
             if download.status() == MirrorStatus.STATUS_DOWNLOADING:
-                if hasattr(download, 'is_torrent'):
-                    msg += f"\n<b>Peer :</b> {download.aria_download().connections} " \
-                           f"<b>| Seed :</b> {download.aria_download().num_seeders}"
+                #if hasattr(download, 'is_torrent'):
+                try:
+                    msg += f"\n<b>Info :- Seeders:</b> {download.aria_download().num_seeders}" \
+                        f" & <b>Peers :</b> {download.aria_download().connections}"
+                except:
+                    pass
                 msg += f"\n🗑 ️<b>cancel :</b> <code>/cancel {download.gid()}</code>"
             msg += "\n\n"
         return msg
