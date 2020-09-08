@@ -220,6 +220,7 @@ def _mirror(bot: Client, message: Message, isTar=False, extract=False):
         for i in media_array:
             if i is not None:
                 file = i
+                LOGGER.info(str(file))
                 break
 
         if len(link) == 0:
@@ -239,6 +240,7 @@ def _mirror(bot: Client, message: Message, isTar=False, extract=False):
                         Interval.append(setInterval(DOWNLOAD_STATUS_UPDATE_INTERVAL, update_all_messages))
                     return
                 else:
+                    LOGGER.info(str(file.GetFile()))
                     link = file.get_file().file_path
     else:
         tag = None
