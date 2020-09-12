@@ -136,7 +136,7 @@ def sendStatusMessage(msg: Message, bot: Client):
         if msg.chat.id in list(status_reply_dict.keys()):
             try:
                 message = status_reply_dict[msg.chat.id]
-                deleteMessage(bot, message)
+                deleteMessage(message)
                 del status_reply_dict[msg.chat.id]
             except Exception as e:
                 LOGGER.error(str(e))

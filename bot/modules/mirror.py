@@ -205,6 +205,7 @@ class MirrorListener(listeners.MirrorListeners):
 
 
 def _mirror(bot: Client, message: Message, isTar=False, extract=False):
+    analysing = sendMessage('Hold on ⏳, Analizing ...', bot, message)
     message_args = message.text.split(' ')
     try:
         link = message_args[1]
@@ -220,7 +221,6 @@ def _mirror(bot: Client, message: Message, isTar=False, extract=False):
         for i in media_array:
             if i is not None:
                 file = i
-                LOGGER.info(str(file))
                 break
 
         if len(link) == 0:
@@ -240,14 +240,14 @@ def _mirror(bot: Client, message: Message, isTar=False, extract=False):
                         Interval.append(setInterval(DOWNLOAD_STATUS_UPDATE_INTERVAL, update_all_messages))
                     return
                 else:
-                    LOGGER.info(str(file.GetFile()))
-                    link = file.get_file().file_path
+                    link = reply_to.download()
     else:
         tag = None
-    if not bot_utils.is_url(link) and not bot_utils.is_magnet(link):
+    if not bot_utils.is_url(link) and not bot_utils.is_magnet(link) and not bot_utils.is_torrent(link):
+        deleteMessage(analysing)
         sendMessage('No download source provided', bot, message)
         return
-
+    
     try:
         link = direct_link_generator(link)
     except DirectDownloadLinkException as e:
@@ -259,6 +259,7 @@ def _mirror(bot: Client, message: Message, isTar=False, extract=False):
     else:
         ariaDlManager.add_download(link, f'{DOWNLOAD_DIR}/{listener.uid}/', listener)
     sendStatusMessage(message, bot)
+    deleteMessage(analysing)
     if len(Interval) == 0:
         Interval.append(setInterval(DOWNLOAD_STATUS_UPDATE_INTERVAL, update_all_messages))
 

@@ -1,5 +1,6 @@
 import logging
 import re
+import os
 import threading
 import time
 
@@ -144,6 +145,12 @@ def is_magnet(url: str):
         return True
     return False
 
+
+def is_torrent(file_name: str):
+    if os.path.exists(file_name) and file_name.lower().endswith(".torrent"):
+        return True
+    return False
+    
 
 def is_mega_link(url: str):
     return "mega.nz" in url

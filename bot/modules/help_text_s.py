@@ -59,7 +59,7 @@ Type /{BotCommands.HelpCommand} to get a list of available commands
     filters.command(BotCommands.RestartCommand) &
     filters.user(OWNER_ID)
 )
-def restart(client: Client, message: Message):
+async def restart(client: Client, message: Message):
     restart_message = sendMessage(
         "Restarting, Please wait!",
         client,
